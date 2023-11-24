@@ -36,8 +36,9 @@ fn test_callback(httpserver: &mut EspHttpServer) ->  Result<(), EspError> {
 fn test_spotify(httpserver: &mut EspHttpServer) ->  Result<(), EspError> {
     httpserver.fn_handler("/test", Method::Get, |request| {
         // Retrieve html String
-        let token = spotify_handler::get_auth_token()?;
-        let html = test_html(token);
+        let mut token = spotify_handler::get_auth_token()?;
+        let currently_playing_song = spotify_handler::get_currently_playing_song(token.access_token);
+        let html = test_html(currently_playing_song.unwrap().item.album.);
 
         // Respond with OK status
         let mut response = request.into_ok_response()?;
